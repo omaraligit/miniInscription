@@ -32,13 +32,13 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group form-check mb-0">
-                            <input type="radio" required class="form-check-input" id="Home" v-model="sexe" name="sexe">
+                            <input type="radio" required class="form-check-input" id="Home" value="H" v-model="sexe" name="sexe">
                             <label class="form-check-label" for="Home">Home</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group form-check mb-0">
-                            <input type="radio" required class="form-check-input" id="femme" v-model="sexe" name="sexe">
+                            <input type="radio" required class="form-check-input" id="femme" value="F" v-model="sexe" name="sexe">
                             <label class="form-check-label" for="femme">Femme</label>
                         </div>
                     </div>
@@ -47,20 +47,20 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group form-check">
-                            <input type="radio" checked class="form-check-input" id="Marocain" v-model="pays" name="pays">
+                            <input type="radio" checked class="form-check-input" id="Marocain" value="M" v-model="pays" name="pays">
                             <label class="form-check-label" for="Marocain">Marocain</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group form-check">
-                            <input type="radio" class="form-check-input" id="Etranger" v-model="pays" name="pays">
+                            <input type="radio" class="form-check-input" id="Etranger" value="E" v-model="pays" name="pays">
                             <label class="form-check-label" for="Etranger">Etranger</label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" v-on:click="warn('Form cannot be submitted yet.', $event)" >Submit</button>
+        <button type="submit" class="btn btn-primary" v-on:click="SaveMember($event)" >Submit</button>
     </form>
 
 
@@ -77,28 +77,28 @@
             prenom:"",
             date_de_naissance:"",
             telephone:"",
-            sexe:"",
-            pays:"",
+            sexe:"H",
+            pays:"M",
         },
         methods: {
-            warn: (message, event) => {
+            SaveMember: function(event) {
                 // now we have access to the native event
                 if (event) {
                     event.preventDefault()
                 }
-                fetch("http://localhost:8000/new/member", {
-                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                    mode: 'no-cors', // no-cors, *cors, same-origin
-                    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                    credentials: 'same-origin', // include, *same-origin, omit
-                    headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    redirect: 'follow', // manual, *follow, error
-                    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                    body: JSON.stringify(this.data) // body data type must match "Content-Type" header
+                // Send a POST request
+                axios({
+                    method: 'post',
+                    url: 'http://127.0.0.1:8000/new/member',
+                    data: this.$data
+                })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(err => {
+                    alert('add error msg')
                 });
+                
             }
         }
     })
