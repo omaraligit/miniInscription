@@ -1,0 +1,7 @@
+index:
+   path: /
+   controller: App\Controller\RegistrationController::index
+registerNewMember:
+   path: /new/member
+   controller: App\Controller\RegistrationController::registerNewMember
+   methods: POST

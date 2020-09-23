@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Inscription des membre <span v-text="message"></span></h1>
+
+    <hr/>
+
+    <form>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label for="Nom">Nom</label>
+                    <input type="text" class="form-control" id="Nom" name="nom">
+                </div>
+                <div class="form-group">
+                    <label for="Prenom">Prenom</label>
+                    <input type="text" class="form-control" id="Prenom" name="prenom">
+                </div>
+                <div class="form-group">
+                    <label for="date_de_naissance">Date de naissance</label>
+                    <input type="date" class="form-control" required id="date_de_naissance" name="date_de_naissance" format="yyyy-MM-dd">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    <label for="Telephone">Telephone</label>
+                    <input type="text" required class="form-control" id="Telephone" name="telephone" pattern="[0]{1}[6,7]{1} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}" title="telephone marocain 06/7 xx xx xx xx">
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group form-check mb-0">
+                            <input type="radio" required class="form-check-input" id="Home" name="sexe">
+                            <label class="form-check-label" for="Home">Home</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group form-check mb-0">
+                            <input type="radio" required class="form-check-input" id="femme" name="sexe">
+                            <label class="form-check-label" for="femme">Femme</label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group form-check">
+                            <input type="radio" checked class="form-check-input" id="Marocain" name="pays">
+                            <label class="form-check-label" for="Marocain">Marocain</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group form-check">
+                            <input type="radio" class="form-check-input" id="Etranger" name="pays">
+                            <label class="form-check-label" for="Etranger">Etranger</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!'
+        }
+    })
+</script>
+
+{% endblock %}
