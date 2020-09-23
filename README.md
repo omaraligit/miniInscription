@@ -1,1 +1,1 @@
-"# miniInscription" 
+# miniInscription
