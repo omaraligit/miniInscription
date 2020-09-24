@@ -5,3 +5,7 @@ registerNewMember:
    path: /new/member
    controller: App\Controller\RegistrationController::registerNewMember
    methods: POST
+registerNewMembersByFile:
+   path: /new/members-file
+   controller: App\Controller\RegistrationController::registerNewMembersByFile
+   methods: POST
