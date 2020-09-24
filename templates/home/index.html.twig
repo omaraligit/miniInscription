@@ -69,9 +69,9 @@
 
     <hr/>
 
-    <form class="mt-5" >
+    <form class="mt-5"  @submit="checkForm"  >
 
-        <input type="file" class="" id="membersfile">
+        <input type="file" required class="" id="membersfile">
 
         <button type="submit" class="btn btn-primary" v-on:click="saveFileOfMembers($event)" >Submit excel file</button>
 
@@ -98,7 +98,6 @@
     var app = new Vue({
         el: '#app',
         data: {
-            message: 'Hello Vue!',
             nom:"",
             prenom:"",
             date_de_naissance:"",
@@ -141,13 +140,19 @@
                         this.$data.serverResponse = "";
                         this.$data.alertError=error.response.data.error
                     }
+                    if (error.response.status == 422) {
+                        errors = ""
+                        for (const [key, value] of Object.entries(error.response.data.error)) {
+                            errors += ` ${key}: ${value}, `;
+                        }
+                        this.$data.alertError=errors
+                    }
 
                 });
                 
             },
             saveFileOfMembers: function (e) {
                 
-                e.preventDefault();
                 var formData = new FormData();
                 var imagefile = document.querySelector('#membersfile');
                 formData.append("membersfile", imagefile.files[0]);
@@ -157,10 +162,16 @@
                     }
                 })
                 .then(response => {
+                    
+                    this.$data.alertError="";
                     console.log(response);
+                    this.$data.serverResponse = "member bien ajouter avec les id " + JSON.stringify(response.data)
                 })
                 .catch(error => {
-                    console.log(error);
+                    if (error.response.status == 400) {
+                        this.$data.serverResponse = "";
+                        this.$data.alertError=error.response.data.error
+                    }
                 });
             }
         }

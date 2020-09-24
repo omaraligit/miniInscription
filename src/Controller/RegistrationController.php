@@ -10,6 +10,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
@@ -30,13 +33,12 @@ class RegistrationController extends AbstractController
      *   des âges + 10% et la moyenne des âges - 10%.
      * - Si l’inscription est faite entre 12h et 21h, l’état est valide, si non l’état est en attente
      */
-    public function registerNewMember(Request $request)
+    public function registerNewMember(Request $request, ValidatorInterface $validator)
     {
-        // validation
-        // TODO :: ad validation 
         // rasemblade des data
         $data = json_decode($request->getContent(), true);
 
+        
         // age du member
         $age = DateTime::createFromFormat('d/m/Y',$data["date_de_naissance"] )->diff(new DateTime('now'))->y;
         // get totqle saved lins to db and test if over 11
@@ -90,6 +92,21 @@ class RegistrationController extends AbstractController
         $member->setSexe($data["sexe"]);
         $member->setTelephone($data["telephone"]);
 
+
+        // validation
+        $errors = $validator->validate($member);
+        $errorsBag = [];
+        if (count($errors) > 0) {
+            /*
+             * Uses a __toString method on the $errors variable which is a
+             * ConstraintViolationList object. This gives us a nice string
+             * for debugging.
+             */
+            foreach ($errors as $key => $err) {
+                $errorsBag[$err->getPropertyPath()] = $err->getMessage();
+            }
+            return $this->json(["error"=>$errorsBag],422);
+        }
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($member);
 

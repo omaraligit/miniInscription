@@ -4,12 +4,16 @@ namespace App\Entity;
 
 use App\Repository\MemberRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=MemberRepository::class)
  */
 class Member
 {
+
+    const GENRES = ['H','F'];
+
+    const PAYS = ['M', 'E'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -19,11 +23,27 @@ class Member
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "{{ limit }} lettres ou plus",
+     *      maxMessage = "{{ limit }} lettres max",
+     *      allowEmptyString = false
+     * )
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "{{ limit }} lettres ou plus",
+     *      maxMessage = "{{ limit }} lettres max",
+     *      allowEmptyString = false
+     * )
      */
     private $prenom;
 
@@ -34,6 +54,7 @@ class Member
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Member::GENRES, message="sexe non valid H / F.")
      */
     private $sexe;
 
@@ -44,6 +65,7 @@ class Member
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Member::PAYS, message="pays non valid M / E.")
      */
     private $pays;
 
@@ -54,6 +76,7 @@ class Member
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice({"V","NV"})
      */
     private $etat;
 
